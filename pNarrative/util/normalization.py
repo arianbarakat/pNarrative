@@ -1,10 +1,17 @@
-def scale(x, limits):
+def scale(x, limits, custom_max = None, custom_min = None):
     import numpy as np
     assert isinstance(limits, tuple)
     assert len(limits) == 2
     x = np.array(x)
-    x_min = np.min(x)
-    x_max = np.max(x)
+
+    if custom_min == None:
+        x_min = np.min(x)
+    else:
+        x_min = custom_min
+    if custom_max == None:
+        x_max = np.max(x)
+    else:
+        x_max = custom_max
 
     a = limits[0]
     b = limits[1]

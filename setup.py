@@ -11,6 +11,7 @@ setup(name='pNarrative',
       install_requires=[
           're',
           'numpy',
-          'inspect'
+          'inspect',
+          'matplotlib.pyplot'
       ],
       zip_safe=False)
