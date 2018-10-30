@@ -1,5 +1,4 @@
-def consant(V1, V2, args):
-    import numpy as np
+def constant(V1, V2, args):
     import numpy as np
     assert isinstance(args, dict)
     assert all([argument in ["sigma"] for argument in args.keys()])
