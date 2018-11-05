@@ -1,27 +1,46 @@
 
-def text2sentence(text, lower = False):
+def segment2sentence(text, lower = False):
     import re
 
     assert isinstance(text, str)
     assert isinstance(lower, bool)
 
-    rexeg = r'\w(\.{3}|[^\.|\?|!])+(\.|\?|!|.$)'
-    sentences  = [i.group(0) for i in re.finditer(rexeg, text)]
+    regex = r'\w(\.{3}|[^\.|\?|!])+(\.|\?|!|.$)'
+    segments  = [i.group(0) for i in re.finditer(regex, text)]
 
     if lower:
         try:
-            sentences = [sent.lower() for sent in sentences if not sent == '']
+            segments = [seg.lower() for seg in segments if not seg == '']
         except NameError:
-            sentences = []
+            segments = []
     else:
-        sentences = [sent for sent in sentences if not sent == '']
-    return sentences
+        segments = [seg for seg in segments if not seg == '']
+    return segments
 
-
-def sentence2tokens(sentence):# include_emoticons = False):
+def segment2custom(text, lower = False, **kwargs):
     import re
 
-    assert isinstance(sentence, str)
+    assert isinstance(text, str)
+    assert isinstance(lower, bool)
+
+    regex = kwargs['pattern']
+    assert isinstance(regex, str)
+    segments  = re.split(regex, text)
+
+    if lower:
+        try:
+            segments = [seg.lower() for seg in segments if not seg == '']
+        except NameError:
+            segments = []
+    else:
+        segments = [seg for seg in segments if not seg == '']
+    return segments
+
+
+def tokenize(text):# include_emoticons = False):
+    import re
+
+    assert isinstance(text, str)
     #assert isinstance(include_emoticons, bool)
 
     #compile_RE = lambda pat:  re.compile(pat,  re.UNICODE)
@@ -32,7 +51,7 @@ def sentence2tokens(sentence):# include_emoticons = False):
     #else:
     regex = "\W"
 
-    tokens = re.split(regex, sentence)
+    tokens = re.split(regex, text)
     return [token for token in tokens if not token == '']
 #
 #def get_emoticons_RE():

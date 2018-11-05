@@ -35,7 +35,7 @@ def get_sentiment_lexicon(lexicon, lang):
     path_base = os.path.dirname(pNarrative.__file__)
     path_file = filename[lexicon][lang]
     path_full = path_base + path_file
-    print(path_full)
+
     lexicon_dictionary = create_lexicon(path_to_file= path_full ,delim="\t")
     return lexicon_dictionary
 

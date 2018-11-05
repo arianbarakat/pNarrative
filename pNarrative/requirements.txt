@@ -2,3 +2,4 @@ re
 numpy
 matplotlib
 os
+pandas
