@@ -9,9 +9,20 @@ The GP implementation for this module is using the pseudo code from C. E. Rasmus
 
 
 
-## NOTE: THE MODULE IS STILL UNDER DEVELOPMENT AND IT MAY CONTAIN FEW BUGS
+__NOTE: THE MODULE IS STILL UNDER DEVELOPMENT AND IT MAY CONTAIN FEW BUGS__
 
-### Installation
+## Reference
+
+The module contains, as of this moment, the following sentiment lexcicons:
+
+__AFINN__:  
+By Finn Arup Nielsen as the [AFINN WORD DATABASE](http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010). Copyright protected and distributed under
+[Open Database License (ODbL) v1.0](http://www.opendatacommons.org/licenses/odbl/1.0/). 
+
+__BING__:  
+By Minqing Hu and Bing Liu as the [OPINION LEXICON](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html).
+
+## Installation
 
 First install the requirements/dependecies listed in the _requirements.txt_ file
 
@@ -27,7 +38,9 @@ python setup.py install
 ```
 
 
-### Demonstration/Example
+## Demonstration/Example
+
+#### Overview
 
 The workflow of the module can be summarized as follows:
 
@@ -68,7 +81,7 @@ from pNarrative.kernels.rbf import rbf
 from pNarrative.parser.sentiment_scorer import get_sentiment_lexicon
 ```
 
-__Step 1:__ Init a "Narrative"-object
+#### __Step 1:__ Init a "Narrative"-object
 
 
 ```python
@@ -79,7 +92,7 @@ book = Narrative.Narrative(book=r.text,id="Bannlyst - Selma Lagerlöf")
 
 Note: The "id" argument will used as the header when plotting the Narrative in the last step
 
-__Step 2:__ Segment text  
+#### __Step 2:__ Segment text  
 
 In this example, we'll segment the text into sentences by setting the segmentation mode to "sentence". However, you could also split the text to any definition of a segment by setting the mode to "custom" and supplying a regex pattern to the "pattern" argument.
 
@@ -114,7 +127,7 @@ for i, sent in enumerate(book.segments[200:205]):
     hårt sammanbitna tänder.                                                                                                                                                            
 
 
-__Step 3:__ Get sentiment Scores  
+#### __Step 3:__ Get sentiment Scores  
 
 You could use any custom sentiment lexicon to extract the sentence sentiments by using the "create_lexicon" function which takes a .txt file and converts it to a dictonary-formed python object. However, this module includes a number of lexicon that we can access using the "get_sentiment_lexicon" function. 
 
@@ -126,7 +139,7 @@ lexicon_sv = get_sentiment_lexicon(lexicon = "afinn",lang="sv")
 book.get_sentiment_score(lexicon=lexicon_sv)
 ```
 
-__Step 4:__  Plot Narrative Arc/Plot
+#### __Step 4:__  Plot Narrative Arc/Plot
 
 Then we simply run the __get\_narrative\_estimation__  method to get the "macro" shape of the narrative. For this particular case, we'll use the rbf (radial basis function), a.k.a. the squared expontential, kernel with the parameters $\sigma = 1$ and $\ell = 20$. 
 
@@ -139,7 +152,7 @@ book.get_narrative_estimation(kernel= rbf, kernel_parameters= {"el":20, "sigma":
     576 ms ± 29.8 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 
 
-__Step 5:__ Plotting the Narrative
+#### __Step 5:__ Plotting the Narrative
 
 To plot the estimated narrative, use the __plot\_narrative__ method. 
 

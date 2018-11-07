@@ -22,10 +22,13 @@ def get_sentiment_lexicon(lexicon, lang):
 
     import os
     import pNarrative
-    existing_lexicons = {"afinn":["sv","en"]}
+    existing_lexicons = {"afinn":["sv","en", "dk"], "bing":["en"]}
     filename = {"afinn":\
                     {"en":'/data/lexicons/afinn/AFINN-en-165.txt',\
-                     "sv":'/data/lexicons/afinn/AFINN-sv-165.txt'}}
+                     "sv":'/data/lexicons/afinn/AFINN-sv-165.txt',\
+                     "dk":"/data/lexicons/afinn/AFINN-da-32.txt"},\
+                "bing":\
+                    {"en":"/data/lexicons/bing/BING_ENGLISH.txt"}}
 
     assert isinstance(lexicon, str)
     assert isinstance(lang, str)
