@@ -76,6 +76,30 @@ class Narrative():
         self.narrative_estimation.train(kernel_parameters = kernel_parameters, filter_zeros = filter_zeros, use_normalized_x = use_normalized_x)
         self.narrative_estimation.predict()
 
+    def glimpse(self, narrative_time, wdw_size):
+        from pNarrative.util.find_nearest import find_nearest
+        from pNarrative.util.normalization import normalizeNarrativeTime
+        narrative_timeline = normalizeNarrativeTime(self.segmentIdx)
+
+        idx = find_nearest(x = narrative_timeline, value= narrative_time)
+
+        left_idx = idx-wdw_size
+        right_idx = idx+wdw_size
+
+        if left_idx< 0:
+            left_idx = 0
+        if right_idx>len(narrative_timeline):
+            right_idx = len(narrative_timeline)
+
+        if hasattr(self, "sentiment_scores"):
+            for time, score, segment in zip(narrative_timeline[left_idx:right_idx],\
+                                    self.sentiment_scores[left_idx:right_idx],\
+                                    self.segments[left_idx:right_idx]):
+                print("("+str(round(time,2))+"% | Score: "+str(score)+" ) " + str(segment))
+        else:
+            for time, segment in zip(narrative_timeline[left_idx:right_idx], self.segments[left_idx:right_idx]):
+                print("("+str(round(time,2))+"%) " + str(segment))
+
     def plot_narrative(self, type, **kwargs):
-        from pNarrative.plotting.plot_narrative  import plot_narrative
+        from pNarrative.plotting.plot_narrative import plot_narrative
         plot_narrative(object=self, type = type, **kwargs)
