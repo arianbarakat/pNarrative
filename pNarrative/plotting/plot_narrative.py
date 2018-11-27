@@ -1,7 +1,7 @@
 
 
 def plot_narrative(object, type, **kwargs):
-    assert type in ["gp", "rolling_mean", "merged"], "Select a supported plot-type"
+    assert type in ["gp", "rolling_mean", "merged", "syuzhet"], "Select a supported plot-type"
 
     if type == "gp":
         plot_gp(object= object, **kwargs)
@@ -9,10 +9,33 @@ def plot_narrative(object, type, **kwargs):
     if type == "rolling_mean":
         plot_moving_avg(object=object, **kwargs)
 
+    if type == "syuzhet":
+        plot_syuzhet(object=object, **kwargs)
+
     if type == "merged":
         plot_merged(object=object, **kwargs)
 
 
+def plot_syuzhet(object, **kwargs):
+    import matplotlib.pyplot as plt
+    from pNarrative.util.normalization import scale, normalizeNarrativeTime
+
+    x_grid = normalizeNarrativeTime(object.narrative_estimation_syuzhet["narrative_time"])
+    y_grid = list(object.narrative_estimation_syuzhet["estimated_narrative"])
+
+    if "scale_narrative" in kwargs.keys():
+        if kwargs["scale_narrative"]:
+            y_grid = scale(y_grid, (-1,1))
+
+    fig = plt.figure()
+    plt.plot(x_grid,y_grid, linestyle='solid')
+    plt.xlim(0, 100)
+
+    if not object.text_id == None:
+        fig.suptitle(object.text_id, fontsize=12)
+    plt.ylabel('Sentiment Polarity')
+    plt.xlabel('Narrative Time (%)')
+    plt.draw()
 
 
 def plot_gp(object, **kwargs):

@@ -41,34 +41,11 @@ def tokenize(text):# include_emoticons = False):
     import re
 
     assert isinstance(text, str)
-    #assert isinstance(include_emoticons, bool)
 
-    #compile_RE = lambda pat:  re.compile(pat,  re.UNICODE)
-    #emoticons = get_emoticons_RE()
-
-    #if include_emoticons:
-    #    regex = "\W|^"+emoticons
-    #else:
     regex = "\W"
 
     tokens = re.split(regex, text)
     return [token for token in tokens if not token == '']
-#
-#def get_emoticons_RE():
-#    import re#
-
-#    emoticons_parts = {"NormalEyes":r'[:=]',\
-#                        "Wink":r'[;]',\
-#                        "NoseArea":r'(|o|O|-)',\
-#                        "HappyMouths":r'[D\)\]]',\
-#                        "SadMouths":r'[\(\[]', \
-#                        "Tongue":r'[pP]'}
-#    emoticons =\
-#        "("+emoticons_parts["NormalEyes"]+ "|"+emoticons_parts["Wink"]+")"\
-#        +emoticons_parts["NoseArea"]+\
-#        "("+emoticons_parts["Tongue"]+"|"+emoticons_parts["SadMouths"]+"|"+emoticons_parts["HappyMouths"]+")"#
-
-#    return emoticons
 
 
 

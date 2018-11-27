@@ -67,7 +67,14 @@ class Narrative():
 
         self.sentiment_scores = [get_sentiment_score(tokens=tokens, lexicon = lexicon) for tokens in self.segmentTokens]
 
-    def get_narrative_estimation(self, kernel, kernel_parameters, noise_sigma = 1, filter_zeros = True, use_normalized_x = True):
+    def input_custom_sentiment_score(self, sentiment_scores):
+
+        assert isinstance(sentiment_scores,  list)
+        assert len(sentiment_scores) == len(self.segments), "Number of sentiment scores must match the number of Segments"
+
+        self.sentiment_scores = sentiment_scores
+
+    def narrative_estimation_gp(self, kernel, kernel_parameters, noise_sigma = 1, filter_zeros = True, use_normalized_x = True):
         from pNarrative.gp import gp
         self.narrative_estimation = gp.GP(x = self.segmentIdx,\
                                         y = self.sentiment_scores,\
@@ -76,15 +83,28 @@ class Narrative():
         self.narrative_estimation.train(kernel_parameters = kernel_parameters, filter_zeros = filter_zeros, use_normalized_x = use_normalized_x)
         self.narrative_estimation.predict()
 
+    def narrative_estimation_syuzhet(self, low_pass_size):
+        from pNarrative.syuzhet.syuzhet_dct_transform import syuzhet_dct_transform
+
+        assert isinstance(low_pass_size, int)
+        assert hasattr(self,"sentiment_scores"), "Segment and Score "
+
+        self.narrative_estimation_syuzhet = syuzhet_dct_transform(x=self.sentiment_scores, low_pass_size=low_pass_size)
+
+
+
     def glimpse(self, narrative_time, wdw_size):
         from pNarrative.util.find_nearest import find_nearest
         from pNarrative.util.normalization import normalizeNarrativeTime
+
+        assert isinstance(wdw_size, int)
+
         narrative_timeline = normalizeNarrativeTime(self.segmentIdx)
 
         idx = find_nearest(x = narrative_timeline, value= narrative_time)
 
         left_idx = idx-wdw_size
-        right_idx = idx+wdw_size
+        right_idx = idx+wdw_size+1
 
         if left_idx< 0:
             left_idx = 0
@@ -95,7 +115,7 @@ class Narrative():
             for time, score, segment in zip(narrative_timeline[left_idx:right_idx],\
                                     self.sentiment_scores[left_idx:right_idx],\
                                     self.segments[left_idx:right_idx]):
-                print("("+str(round(time,2))+"% | Score: "+str(score)+" ) " + str(segment))
+                print("("+str(round(time,2))+"% | Score: "+str(score)+") " + str(segment))
         else:
             for time, segment in zip(narrative_timeline[left_idx:right_idx], self.segments[left_idx:right_idx]):
                 print("("+str(round(time,2))+"%) " + str(segment))
